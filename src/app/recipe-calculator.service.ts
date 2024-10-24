@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CatDataService, CatStatus } from './cat-data.service';
+import { CatDataService } from './cat-data.service';
+import { CatStatus } from './shared';
 
 interface Ingredient {
   name: string;

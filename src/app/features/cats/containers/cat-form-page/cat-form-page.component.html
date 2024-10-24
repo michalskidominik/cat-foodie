@@ -1,0 +1,94 @@
+@for (cat of cats(); track $index) {
+  <div style="display: flex; gap: 16px; align-items: center">
+    <span>{{ cat.name }}</span>
+    <span>{{ cat.birthDate }}</span>
+    <span>{{ cat.status }}</span>
+    <span>{{ cat.weight }}</span>
+    <span>{{ cat.breed }}</span>
+    <!-- <a routerLink="edit/{{ cat.id }}">Edit</a> -->
+  </div>
+}
+
+<form
+  [formGroup]="form"
+  (ngSubmit)="save()"
+  novalidate
+  style="
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+  "
+>
+  <!-- Imię -->
+  <mat-form-field style="width: 100%" appearance="outline">
+    <mat-label>Imię</mat-label>
+    <input matInput formControlName="name" name="name" />
+    @if (form.controls.name.touched && form.controls.name.invalid) { @if
+    (form.controls.name.hasError('required')) {
+    <mat-error> Imię jest wymagane </mat-error>
+    } }
+  </mat-form-field>
+
+  <!-- Data urodzenia -->
+  <mat-form-field style="width: 100%" appearance="outline">
+    <mat-label>Data urodzenia</mat-label>
+
+    <input matInput formControlName="birthDate" [matDatepicker]="picker" />
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    @if (form.controls.birthDate.touched && form.controls.birthDate.invalid) { @if
+      (form.controls.birthDate.hasError('required')) {
+      <mat-error> Data urodzenia jest wymagana </mat-error>
+      } }
+  </mat-form-field>
+
+  <!-- Status -->
+  <mat-form-field style="width: 100%" appearance="outline">
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="status" required>
+      @for (option of catStatusOptions; track $index) {
+        <mat-option [value]="option.value">
+          {{ option.viewValue }}
+        </mat-option>
+      }
+    </mat-select>
+    @if (form.controls.status.touched && form.controls.status.invalid) {
+      @if (form.controls.status.hasError('required')) {
+        <mat-error> Status jest wymagany </mat-error>
+      }
+    }
+  </mat-form-field>
+
+  <!-- Waga -->
+  <mat-form-field style="width: 100%" appearance="outline">
+    <mat-label>Waga</mat-label>
+    <input
+      matInput
+      type="number"
+      formControlName="weight"
+      name="weight"
+    />
+
+    @if (form.controls.weight.touched && form.controls.weight.invalid) {
+      @if (form.controls.weight.hasError('required')) {
+        <mat-error> Waga jest wymagana </mat-error>
+      }
+
+      @if (form.controls.weight.hasError('min')) {
+        <mat-error> Waga jest zbyt niska </mat-error>
+      }
+    }
+  </mat-form-field>
+    <!-- Rasa -->
+    <mat-form-field style="width: 100%" appearance="outline">
+      <mat-label>Rasa</mat-label>
+      <input matInput formControlName="breed" name="breed" />
+    </mat-form-field>
+
+
+
+  <button mat-flat-button color="primary" style="width: fit-content" [disabled]="form.invalid">
+    Zapisz
+  </button>
+</form>
